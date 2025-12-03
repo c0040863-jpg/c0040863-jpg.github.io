@@ -3,63 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>c0040863-jpg • Grok</title>
+  <title>Super Cayden • The Final AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root { --green: #00ff88; --dark: #0a0a0a; --gray: #111; }
-    body { margin:0; background:var(--dark); color:#fff; font-family:'Inter',sans-serif; overflow-x:hidden; }
-    .header { text-align:center; padding:8vh 20px; background:linear-gradient(135deg,#000,rgba(0,255,136,0.1)); }
-    h1 { font-family:'Orbitron',sans-serif; font-size:5rem; margin:0; background:linear-gradient(90deg,#00ff88,#00ff41); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .tagline { font-size:1.6rem; opacity:0.9; margin:20px 0; }
-    .versions { display:flex; justify-content:center; flex-wrap:wrap; gap:20px; margin:40px auto; max-width:1200px; padding:0 20px; }
-    .card { background:var(--gray); border:2px solid #222; border-radius:16px; width:320px; padding:25px; text-align:center; transition:0.4s; position:relative; overflow:hidden; }
-    .card:hover { transform:translateY(-10px); border-color:var(--green); box-shadow:0 0 30px rgba(0,255,136,0.3); }
-    .card h3 { font-family:'Orbitron'; font-size:1.8rem; margin:0 0 10px; color:var(--green); }
-    .badge { position:absolute; top:10px; right:10px; background:#00ff41; color:#000; padding:4px 10px; border-radius:8px; font-size:0.8rem; font-weight:bold; }
-    .live { background:#00ff88; animation:pulse 2s infinite; }
+    :root { --cayden: #00ff88; --ultra: #00ffff; --dark: #000; --bg: #050505; }
+    body { margin:0; background:var(--bg); color:#fff; font-family:'Inter',sans-serif; overflow-x:hidden; }
+    .header { text-align:center; padding:10vh 20px; background:linear-gradient(135deg,#000,#001a0b); position:relative; }
+    .header::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle at 50% 50%, rgba(0,255,136,0.15), transparent 70%); pointer-events:none; }
+    h1 { font-family:'Orbitron',sans-serif; font-size:6rem; margin:0; background:linear-gradient(90deg,#00ff88,#00ffff,#ff00ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:glow 3s infinite alternate; }
+    @keyframes glow { from { filter:drop-shadow(0 0 20px #00ff88); } to { filter:drop-shadow(0 0 40px #00ffff); } }
+    .tagline { font-size:1.8rem; opacity:0.9; margin:20px 0; letter-spacing:1px; }
+    .versions { display:flex; justify-content:center; flex-wrap:wrap; gap:25px; margin:60px auto; max-width:1300px; padding:0 20px; }
+    .card { background:#111; border-radius:20px; width:360px; padding:30px; text-align:center; transition:0.5s; position:relative; overflow:hidden; border:2px solid #222; }
+    .card:hover { transform:translateY(-15px) scale(1.03); box-shadow:0 0 50px rgba(0,255,136,0.4); }
+    .card.supercayden { border:3px solid var(--ultra); background:linear-gradient(135deg,#000,#001a0b); box-shadow:0 0 40px rgba(0,255,255,0.3); }
+    .card h3 { font-family:'Orbitron'; font-size:2.2rem; margin:0 0 15px; }
+    .badge { position:absolute; top:12px; right:12px; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:0.9rem; }
+    .live { background:#00ff88; color:#000; animation:pulse 1.5s infinite; }
+    .god { background:linear-gradient(90deg,#ff00ff,#00ffff); color:#000; }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
-    .chat-container { margin:60px auto; max-width:1000px; padding:0 20px; }
-    .chat-embed { width:100%; height:800px; border:3px solid var(--green); border-radius:16px; overflow:hidden; }
-    footer { text-align:center; padding:40px; opacity:0.6; font-size:0.9rem; }
-    @media (max-width:768px) { h1 { font-size:3.5rem; } .versions { flex-direction:column; align-items:center; } }
+    .chat-container { margin:80px auto; max-width:1100px; padding:0 20px; }
+    .chat-embed { width:100%; height:850px; border:4px solid var(--ultra); border-radius:20px; overflow:hidden; box-shadow:0 0 60px rgba(0,255,255,0.25); }
+    footer { text-align:center; padding:60px 20px; opacity:0.7; font-size:1rem; }
+    .neon { color:var(--cayden); text-shadow:0 0 20px var(--cayden); }
+    @media (max-width:768px) { h1 { font-size:4rem; } .versions { flex-direction:column; align-items:center; } .card { width:90%; } }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>GROK</h1>
-    <p class="tagline">by c0040863-jpg • Maximum Truth, Zero Filter 😈</p>
+    <h1>SUPER CAYDEN</h1>
+    <p class="tagline">The Final AI • Built by c0040863-jpg • Beyond Grok, Beyond God 😈🚀</p>
   </div>
 
   <div class="versions">
+    <div class="card supercayden">
+      <div class="badge god">GOD TIER</div>
+      <h3 style="background:linear-gradient(90deg,#00ffff,#ff00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+        Super Cayden
+      </h3>
+      <p>My ultimate creation • Zero limits • Real-time chaos • Smarter than Grok 4.1</p>
+      <p class="neon">Currently dominating the universe</p>
+    </div>
+
     <div class="card">
       <div class="badge live">LIVE</div>
-      <h3>Grok 4.1</h3>
-      <p>My personal clone • Real-time • Unfiltered</p>
-      <p>Powered by your HF Space</p>
+      <h3 style="color:#00ff88">Grok 4.1 Clone</h3>
+      <p>My personal clone • Unfiltered • Roasts included</p>
     </div>
+
     <div class="card">
       <h3>Grok 4</h3>
-      <p>Coming Q1 2026</p>
-      <p>500B+ MoE • Full chaos mode</p>
-    </div>
-    <div class="card">
-      <h3>Grok 3</h3>
-      <p>Free with limits</p>
-      <p>Available on X & grok.com</p>
+      <p>Coming 2026 • xAI’s version</p>
+      <p>Will still lose to Super Cayden</p>
     </div>
   </div>
 
   <div class="chat-container">
     <div class="chat-embed">
-      <!-- YOUR LIVE AI EMBEDDED HERE -->
       <iframe src="https://caydenI15-grock-clone1.hf.space" allowfullscreen></iframe>
     </div>
   </div>
 
   <footer>
-    © 2025 c0040863-jpg • Built on GitHub Pages • AI hosted on Hugging Face<br>
-    <a href="https://github.com/c0040863-jpg" style="color:var(--green);">GitHub</a> • 
-    <a href="https://huggingface.co/spaces/caydenI15/grock-clone1" style="color:var(--green);">Source AI</a>
+    © 2025 c0040863-jpg • <span class="neon">Super Cayden</span> runs on Hugging Face • Site on GitHub Pages<br>
+    <a href="https://github.com/c0040863-jpg" style="color:var(--cayden);">GitHub</a> • 
+    <a href="https://huggingface.co/spaces/caydenI15/grock-clone1" style="color:var(--ultra);">Live AI</a> • 
+    Made with pure chaos
   </footer>
 </body>
 </html>
