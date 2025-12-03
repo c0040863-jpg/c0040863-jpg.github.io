@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CaydeX • Best Coding AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Gradio Web Component JS (v4.44.0 – matches 2025 HF defaults, enables anonymous embed) -->
+  <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.44.0/gradio.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { background:#000; color:#fff; font-family:'Inter',sans-serif; height:100vh; display:flex; overflow:hidden; }
@@ -17,16 +19,25 @@
     .bot-item:hover { background:#111; }
     .bot-item.active { background:#111; border-left:4px solid #00ff88; }
     .bot-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px; }
-    .main { flex:1; display:flex; flex-direction:column; }
-    iframe { flex:1; width:100%; border:none; background:#000; }
+    .main { flex:1; display:flex; flex-direction:column; position:relative; }
+    .chat-embed { flex:1; width:100%; background:#000; }
     .input-bar { height:90px; background:#000; border-top:1px solid #222; padding:0 24px; display:flex; align-items:center; gap:16px; }
     .input-wrap { flex:1; max-width:900px; background:#111; border:1px solid #333; border-radius:16px; padding:12px 16px; display:flex; align-items:center; gap:12px; }
     .input-wrap input { flex:1; background:none; border:none; color:#fff; font-size:16px; outline:none; }
     .input-wrap button { background:none; border:none; cursor:pointer; font-size:22px; }
     .send-btn { color:#00ff88; }
+    /* Top-right fake login (no actual auth) */
+    .top-right { position:fixed; top:20px; right:20px; z-index:10; }
+    .login-btn { background:#111; border:1px solid #333; border-radius:8px; padding:8px 16px; cursor:pointer; color:#fff; }
+    .login-btn:hover { border-color:#00ff88; }
   </style>
 </head>
 <body>
+
+  <!-- Fake top-right login (does nothing – no real auth needed) -->
+  <div class="top-right">
+    <button class="login-btn" onclick="alert('No login required – you're already in god mode! 😈')">Login (Optional)</button>
+  </div>
 
   <!-- Sidebar with Bots -->
   <div class="sidebar">
@@ -53,11 +64,13 @@
     </div>
   </div>
 
-  <!-- Main Chat – NO LOGIN EVER -->
+  <!-- Main Chat – Web Component Embed (Anonymous, No Login) -->
   <div class="main">
-    <iframe id="chatframe" 
-      src="https://caydenI15-grock-clone1.hf.space?__theme=dark&__no_login=true" 
-      allowfullscreen></iframe>
+    <gradio-app id="chat-embed" 
+      src="https://caydenI15-grock-clone1.hf.space" 
+      theme="dark"
+      class="chat-embed">
+    </gradio-app>
 
     <div class="input-bar">
       <div class="input-wrap">
@@ -77,20 +90,24 @@
       grok3: "#You are Grok 3 — helpful, honest, but still spicy"
     };
 
-    document.querySelectorAll('.bot-item').forEach(item => {
-      item.addEventListener('click', () => {
-        document.querySelectorAll('.bot-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        const bot = item.getAttribute('data-bot');
-        document.getElementById('chatframe').src = 
-          "https://caydenI15-grock-clone1.hf.space?__theme=dark&__no_login=true" + bots[bot];
+    // Wait for Web Component to load, then switch personalities
+    document.addEventListener('DOMContentLoaded', () => {
+      const embed = document.getElementById('chat-embed');
+      document.querySelectorAll('.bot-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.bot-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          const bot = item.getAttribute('data-bot');
+          // Reload embed with new prompt (Web Component auto-handles)
+          embed.setAttribute('src', `https://caydenI15-grock-clone1.hf.space${bots[bot]}`);
+        });
       });
     });
 
     function newChat() {
       const activeBot = document.querySelector('.bot-item.active')?.getAttribute('data-bot') || 'caydex';
-      document.getElementById('chatframe').src = 
-        "https://caydenI15-grock-clone1.hf.space?__theme=dark&__no_login=true" + bots[activeBot];
+      const embed = document.getElementById('chat-embed');
+      embed.setAttribute('src', `https://caydenI15-grock-clone1.hf.space${bots[activeBot]}`);
     }
   </script>
 
