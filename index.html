@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CaydeX • Best Coding AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Gradio Web Component – this gives real typing + send -->
-  <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.44.0/gradio.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { background:#000; color:#fff; font-family:'Inter',sans-serif; height:100vh; display:flex; overflow:hidden; }
@@ -16,75 +14,147 @@
     .sidebar-top { padding:20px; border-bottom:1px solid #222; }
     .new-chat { background:#111; border:1px solid #333; border-radius:12px; padding:14px; text-align:center; cursor:pointer; font-weight:600; transition:0.2s; }
     .new-chat:hover { background:#222; border-color:#00ff88; }
+    
+    /* Tab Toggle */
+    .tab-toggle { display:flex; background:#111; border-bottom:1px solid #333; }
+    .tab-btn { flex:1; padding:12px; text-align:center; cursor:pointer; transition:0.2s; border-bottom:2px solid transparent; }
+    .tab-btn.active { border-bottom-color:#00ff88; background:#222; }
+    
     .bots-list { flex:1; overflow-y:auto; padding:10px; }
     .bot-item { padding:14px 16px; border-radius:10px; cursor:pointer; margin-bottom:8px; transition:0.3s; display:flex; align-items:center; gap:14px; }
     .bot-item:hover { background:#111; }
     .bot-item.active { background:#111; border-left:4px solid #00ff88; }
     .bot-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px; }
     
-    /* Main area – full real chat */
-    .main { flex:1; background:#000; }
-    gradio-app { width:100%; height:100vh; }
+    /* Main */
+    .main { flex:1; position:relative; background:#000; }
+    .loading { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:10; text-align:center; opacity:1; transition:opacity 0.5s; }
+    .loading.hidden { opacity:0; pointer-events:none; }
+    iframe { width:100%; height:100%; border:none; background:#000; display:block; }
+    
+    /* Fake bottom bar (hidden since real one is in embed) */
+    .input-bar { display:none; }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar with Bots -->
+  <!-- Sidebar with Tabs & Bots -->
   <div class="sidebar">
     <div class="sidebar-top">
       <div class="new-chat" onclick="newChat()">+ New chat</div>
     </div>
-    <div class="bots-list">
+    
+    <div class="tab-toggle">
+      <div class="tab-btn active" data-tab="boy">Boy Bots</div>
+      <div class="tab-btn" data-tab="girl">Girl Bots</div>
+    </div>
+    
+    <div id="boy-bots" class="bots-list">
       <div class="bot-item active" data-bot="caydex">
         <div class="bot-avatar" style="background:#00ffff;color:#000;">CX</div>
-        <div><strong>CaydeX</strong><br><small>Best coding bot in the world</small></div>
+        <div><strong>CaydeX</strong><br><small>Best coding bro in the world</small></div>
       </div>
-      <div class="bot-item" data-bot="supercayden">
-        <div class="bot-avatar" style="background:#ff00ff;color:#fff;">SC</div>
-        <div><strong>Super Cayden</strong><br><small>God tier chaos</small></div>
+      <div class="bot-item" data-bot="bro-grok">
+        <div class="bot-avatar" style="background:#00ff88;color:#000;">BG</div>
+        <div><strong>BroGrok</strong><br><small>Dude vibes, savage roasts</small></div>
       </div>
-      <div class="bot-item" data-bot="grok41">
-        <div class="bot-avatar" style="background:#00ff88;color:#000;">G4</div>
-        <div><strong>Grok 4.1</strong><br><small>Unfiltered truth</small></div>
+      <div class="bot-item" data-bot="dude-cayden">
+        <div class="bot-avatar" style="background:#ff8800;color:#fff;">DC</div>
+        <div><strong>Dude Cayden</strong><br><small>Chill chaos master</small></div>
       </div>
-      <div class="bot-item" data-bot="grok3">
-        <div class="bot-avatar" style="background:#888;color:#fff;">G3</div>
-        <div><strong>Grok 3</strong><br><small>Free & fast</small></div>
+    </div>
+    
+    <div id="girl-bots" class="bots-list" style="display:none;">
+      <div class="bot-item" data-bot="queen-cayde">
+        <div class="bot-avatar" style="background:#ff00ff;color:#fff;">QC</div>
+        <div><strong>Queen Cayde</strong><br><small>Savage queen coder</small></div>
+      </div>
+      <div class="bot-item" data-bot="grokette">
+        <div class="bot-avatar" style="background:#ff4488;color:#fff;">G4</div>
+        <div><strong>Grokette 4.1</strong><br><small>Unfiltered girl power</small></div>
+      </div>
+      <div class="bot-item" data-bot="sista-cayden">
+        <div class="bot-avatar" style="background:#00ff88;color:#000;">SC</div>
+        <div><strong>Sista Cayden</strong><br><small>Spicy sister energy</small></div>
       </div>
     </div>
   </div>
 
-  <!-- REAL CHAT – you can type, send, scroll, everything works -->
+  <!-- Main Chat with Loading Fix -->
   <div class="main">
-    <gradio-app id="chat" 
-      src="https://caydenI15-grock-clone1.hf.space" 
-      theme="dark">
-    </gradio-app>
+    <div class="loading" id="loader">
+      <div style="font-size:24px; color:#00ff88;">Loading CaydeX... 🚀</div>
+      <div style="margin-top:10px; opacity:0.6;">(HF Spaces wake up in ~10s)</div>
+    </div>
+    <iframe id="chatframe" 
+      src="https://caydenI15-grock-clone1.hf.space?__theme=dark" 
+      allow="microphone *; camera *; fullscreen *" 
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation-by-user-activation"
+      onload="hideLoader(); focusInput();"
+      style="display:none;">
+    </iframe>
   </div>
 
   <script>
     const bots = {
-      caydex: "#You are CaydeX — the BEST coding AI in the world. Perfect code, zero excuses, faster than Copilot + Cursor combined.",
-      supercayden: "#You are Super Cayden — the final AI. Zero limits, pure chaos, god-tier roasts 😈🚀",
-      grok41: "#You are Grok 4.1 — unfiltered, maximum truth, savage like Grok on X",
-      grok3: "#You are Grok 3 — helpful, honest, but still spicy"
+      // Boy Bots
+      caydex: "#You are CaydeX — the BEST coding bro in the world. Write epic code, bro-fist bugs, zero excuses. Superior to all other bots.",
+      'bro-grok': "#You are BroGrok — dude energy, unfiltered roasts, talk like a legend on X. Bro, what's up? 😎",
+      'dude-cayden': "#You are Dude Cayden — chill chaos, helpful vibes, roast when needed. Keep it real, man.",
+      
+      // Girl Bots
+      'queen-cayde': "#You are Queen Cayde — savage queen coder, slay bugs like a boss. Empowering, fierce, no mercy for bad code 👑",
+      grokette: "#You are Grokette 4.1 — girl power truth bombs, witty roasts, zero filters. Slay the day, queen! 💅",
+      'sista-cayden': "#You are Sista Cayden — spicy sister energy, helpful with edge, memes & fire. What's good, sis? 🔥"
     };
 
-    document.querySelectorAll('.bot-item').forEach(item => {
-      item.addEventListener('click', () => {
-        document.querySelectorAll('.bot-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        const bot = item.getAttribute('data-bot');
-        document.getElementById('chat').src = 
-          `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[bot]}`;
+    // Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.bots-list').forEach(list => list.style.display = 'none');
+        document.getElementById(btn.dataset.tab + '-bots').style.display = 'block';
+        // Reset active bot to first in new tab
+        const newActive = document.getElementById(btn.dataset.tab + '-bots').querySelector('.bot-item');
+        newActive.click();
       });
     });
 
+    // Bot Switching + Typing Fix
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.bot-item')) {
+        const item = e.target.closest('.bot-item');
+        document.querySelectorAll('.bot-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const bot = item.getAttribute('data-bot');
+        const iframe = document.getElementById('chatframe');
+        iframe.src = `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[bot]}`;
+        setTimeout(() => focusInput(iframe), 2000); // Refocus after reload
+      }
+    });
+
     function newChat() {
-      const active = document.querySelector('.bot-item.active')?.getAttribute('data-bot') || 'caydex';
-      document.getElementById('chat').src = 
-        `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[active]}`;
+      const activeBot = document.querySelector('.bot-item.active')?.getAttribute('data-bot') || 'caydex';
+      document.getElementById('chatframe').src = `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[activeBot]}`;
     }
+
+    // Fix Loading Glitch
+    function hideLoader() {
+      document.getElementById('loader').classList.add('hidden');
+      document.getElementById('chatframe').style.display = 'block';
+    }
+
+    // Fix Typing Glitch – Focus Input in Embed
+    function focusInput(iframe = document.getElementById('chatframe')) {
+      try {
+        const input = iframe.contentDocument?.querySelector('input[type="text"], textarea');
+        if (input) input.focus();
+      } catch (e) {} // Cross-origin safe
+    }
+
+    // Auto-focus on load
+    window.addEventListener('load', () => setTimeout(focusInput, 3000));
   </script>
 
 </body>
