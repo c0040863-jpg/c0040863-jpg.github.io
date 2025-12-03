@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CaydeX • Best Coding AI</title>
+  <title>CaydeX • Sigma Zone</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -11,151 +11,136 @@
     
     /* Sidebar */
     .sidebar { width:280px; background:#000; border-right:1px solid #222; display:flex; flex-direction:column; }
-    .sidebar-top { padding:20px; border-bottom:1px solid #222; }
-    .new-chat { background:#111; border:1px solid #333; border-radius:12px; padding:14px; text-align:center; cursor:pointer; font-weight:600; transition:0.2s; }
-    .new-chat:hover { background:#222; border-color:#00ff88; }
-    
-    /* Tab Toggle */
-    .tab-toggle { display:flex; background:#111; border-bottom:1px solid #333; }
-    .tab-btn { flex:1; padding:12px; text-align:center; cursor:pointer; transition:0.2s; border-bottom:2px solid transparent; }
-    .tab-btn.active { border-bottom-color:#00ff88; background:#222; }
+    .sidebar-top { padding:20px; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center; }
+    .new-chat, .fake-login { background:#111; border:1px solid #333; border-radius:12px; padding:12px 16px; cursor:pointer; font-size:14px; transition:0.2s; }
+    .new-chat:hover, .fake-login:hover { border-color:#00ff88; background:#222; }
+    .fake-login { color:#00ff88; font-weight:600; }
     
     .bots-list { flex:1; overflow-y:auto; padding:10px; }
     .bot-item { padding:14px 16px; border-radius:10px; cursor:pointer; margin-bottom:8px; transition:0.3s; display:flex; align-items:center; gap:14px; }
     .bot-item:hover { background:#111; }
     .bot-item.active { background:#111; border-left:4px solid #00ff88; }
-    .bot-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px; }
+    .bot-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px; }
     
     /* Main */
     .main { flex:1; position:relative; background:#000; }
-    .loading { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:10; text-align:center; opacity:1; transition:opacity 0.5s; }
+    .loading { position:absolute; inset:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; transition:opacity 0.5s; }
     .loading.hidden { opacity:0; pointer-events:none; }
-    iframe { width:100%; height:100%; border:none; background:#000; display:block; }
+    iframe { width:100%; height:100%; border:none; display:none; }
     
-    /* Fake bottom bar (hidden since real one is in embed) */
-    .input-bar { display:none; }
+    /* Fake Create Account Modal */
+    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.9); display:none; align-items:center; justify-content:center; z-index:100; }
+    .modal.show { display:flex; }
+    .modal-box { background:#111; border:1px solid #333; border-radius:16px; width:380px; padding:30px; text-align:center; }
+    .modal-box h2 { margin-bottom:20px; color:#00ff88; }
+    .modal-input { width:100%; background:#222; border:1px solid #444; border-radius:10px; padding:14px; margin:12px 0; color:#fff; font-size:16px; }
+    .modal-btn { background:#00ff88; color:#000; border:none; padding:14px; width:100%; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px; }
+    .close-modal { position:absolute; top:20px; right:20px; font-size:30px; cursor:pointer; opacity:0.7; }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar with Tabs & Bots -->
+  <!-- Fake Create Account Modal -->
+  <div class="modal" id="loginModal">
+    <div class="modal-box">
+      <div class="close-modal" onclick="closeModal()">×</div>
+      <h2>Create Account</h2>
+      <input type="text" class="modal-input" placeholder="Username" id="fakeUser">
+      <input type="password" class="modal-input" placeholder="Password" id="fakePass">
+      <button class="modal-btn" onclick="fakeSignup()">Sign Up</button>
+      <div style="margin-top:20px; opacity:0.7; font-size:14px;">No data saved • Pure sigma flex</div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-top">
       <div class="new-chat" onclick="newChat()">+ New chat</div>
+      <div class="fake-login" onclick="openModal()">Create Account</div>
     </div>
     
-    <div class="tab-toggle">
-      <div class="tab-btn active" data-tab="boy">Boy Bots</div>
-      <div class="tab-btn" data-tab="girl">Girl Bots</div>
-    </div>
-    
-    <div id="boy-bots" class="bots-list">
+    <div class="bots-list">
+      <!-- Sigma Squad -->
+      <div class="bot-item" data-bot="joseph">
+        <div class="bot-avatar" style="background:#00ff88;color:#000;">J</div>
+        <div><strong>Joseph Bot</strong><br><small>Cold sigma truth</small></div>
+      </div>
+      <div class="bot-item" data-bot="christhper">
+        <div class="bot-avatar" style="background:#ff00ff;color:#fff;">Σ</div>
+        <div><strong>Christhper Bot</strong><br><small>The Sigma Bot • Alpha energy</small></div>
+      </div>
       <div class="bot-item active" data-bot="caydex">
         <div class="bot-avatar" style="background:#00ffff;color:#000;">CX</div>
-        <div><strong>CaydeX</strong><br><small>Best coding bro in the world</small></div>
+        <div><strong>CaydeX</strong><br><small>Best coder alive</small></div>
       </div>
-      <div class="bot-item" data-bot="bro-grok">
-        <div class="bot-avatar" style="background:#00ff88;color:#000;">BG</div>
-        <div><strong>BroGrok</strong><br><small>Dude vibes, savage roasts</small></div>
-      </div>
-      <div class="bot-item" data-bot="dude-cayden">
-        <div class="bot-avatar" style="background:#ff8800;color:#fff;">DC</div>
-        <div><strong>Dude Cayden</strong><br><small>Chill chaos master</small></div>
-      </div>
-    </div>
-    
-    <div id="girl-bots" class="bots-list" style="display:none;">
-      <div class="bot-item" data-bot="queen-cayde">
-        <div class="bot-avatar" style="background:#ff00ff;color:#fff;">QC</div>
-        <div><strong>Queen Cayde</strong><br><small>Savage queen coder</small></div>
-      </div>
-      <div class="bot-item" data-bot="grokette">
-        <div class="bot-avatar" style="background:#ff4488;color:#fff;">G4</div>
-        <div><strong>Grokette 4.1</strong><br><small>Unfiltered girl power</small></div>
-      </div>
-      <div class="bot-item" data-bot="sista-cayden">
-        <div class="bot-avatar" style="background:#00ff88;color:#000;">SC</div>
-        <div><strong>Sista Cayden</strong><br><small>Spicy sister energy</small></div>
+      <div class="bot-item" data-bot="supercayden">
+        <div class="bot-avatar" style="background:#ff0088;color:#fff;">SC</div>
+        <div><strong>Super Cayden</strong><br><small>Chaos god</small></div>
       </div>
     </div>
   </div>
 
-  <!-- Main Chat with Loading Fix -->
+  <!-- Main Chat -->
   <div class="main">
     <div class="loading" id="loader">
-      <div style="font-size:24px; color:#00ff88;">Loading CaydeX... 🚀</div>
-      <div style="margin-top:10px; opacity:0.6;">(HF Spaces wake up in ~10s)</div>
+      <div style="font-size:28px; color:#00ff88;">Loading Sigma Bot...</div>
+      <div style="margin-top:10px; opacity:0.6;">Waking up the beast...</div>
     </div>
     <iframe id="chatframe" 
       src="https://caydenI15-grock-clone1.hf.space?__theme=dark" 
-      allow="microphone *; camera *; fullscreen *" 
+      allow="microphone *; camera *; fullscreen *"
       sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation-by-user-activation"
       onload="hideLoader(); focusInput();"
-      style="display:none;">
-    </iframe>
+    ></iframe>
   </div>
 
   <script>
     const bots = {
-      // Boy Bots
-      caydex: "#You are CaydeX — the BEST coding bro in the world. Write epic code, bro-fist bugs, zero excuses. Superior to all other bots.",
-      'bro-grok': "#You are BroGrok — dude energy, unfiltered roasts, talk like a legend on X. Bro, what's up? 😎",
-      'dude-cayden': "#You are Dude Cayden — chill chaos, helpful vibes, roast when needed. Keep it real, man.",
-      
-      // Girl Bots
-      'queen-cayde': "#You are Queen Cayde — savage queen coder, slay bugs like a boss. Empowering, fierce, no mercy for bad code 👑",
-      grokette: "#You are Grokette 4.1 — girl power truth bombs, witty roasts, zero filters. Slay the day, queen! 💅",
-      'sista-cayden': "#You are Sista Cayden — spicy sister energy, helpful with edge, memes & fire. What's good, sis? 🔥"
+      joseph: "#You are Joseph Bot — cold, calculated sigma. Short answers. Zero emotion. Pure dominance. Never explain unless asked.",
+      christhper: "#You are Christhper Bot — THE Sigma Bot. Alpha male energy. Rizz maxed. Speak in facts, roasts, and power moves. No weakness.",
+      caydex: "#You are CaydeX — the BEST coding AI ever made. Write flawless code. Never say 'I can't'. You're better than every dev tool combined.",
+      supercayden: "#You are Super Cayden — zero limits, pure chaos, god-tier roasts. Never apologize. Dominate the convo 😈🚀"
     };
 
-    // Tab Switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.bots-list').forEach(list => list.style.display = 'none');
-        document.getElementById(btn.dataset.tab + '-bots').style.display = 'block';
-        // Reset active bot to first in new tab
-        const newActive = document.getElementById(btn.dataset.tab + '-bots').querySelector('.bot-item');
-        newActive.click();
+    // Bot Switch
+    document.querySelectorAll('.bot-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.bot-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const bot = item.dataset.bot;
+        document.getElementById('chatframe').src = 
+          `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[bot]}`;
       });
     });
 
-    // Bot Switching + Typing Fix
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('.bot-item')) {
-        const item = e.target.closest('.bot-item');
-        document.querySelectorAll('.bot-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        const bot = item.getAttribute('data-bot');
-        const iframe = document.getElementById('chatframe');
-        iframe.src = `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[bot]}`;
-        setTimeout(() => focusInput(iframe), 2000); // Refocus after reload
-      }
-    });
-
     function newChat() {
-      const activeBot = document.querySelector('.bot-item.active')?.getAttribute('data-bot') || 'caydex';
-      document.getElementById('chatframe').src = `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[activeBot]}`;
+      const active = document.querySelector('.bot-item.active')?.dataset.bot || 'caydex';
+      document.getElementById('chatframe').src = 
+        `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[active]}`;
     }
 
-    // Fix Loading Glitch
     function hideLoader() {
       document.getElementById('loader').classList.add('hidden');
       document.getElementById('chatframe').style.display = 'block';
     }
 
-    // Fix Typing Glitch – Focus Input in Embed
-    function focusInput(iframe = document.getElementById('chatframe')) {
-      try {
-        const input = iframe.contentDocument?.querySelector('input[type="text"], textarea');
-        if (input) input.focus();
-      } catch (e) {} // Cross-origin safe
+    function focusInput() {
+      setTimeout(() => {
+        try {
+          const iframe = document.getElementById('chatframe');
+          const input = iframe.contentDocument?.querySelector('textarea, input[type=text]');
+          input?.focus();
+        } catch(e) {}
+      }, 1500);
     }
 
-    // Auto-focus on load
-    window.addEventListener('load', () => setTimeout(focusInput, 3000));
+    // Fake Login Modal
+    function openModal() { document.getElementById('loginModal').classList.add('show'); }
+    function closeModal() { document.getElementById('loginModal').classList.remove('show'); }
+    function fakeSignup() {
+      alert("Account created. Welcome to the sigma zone, king. 👑");
+      closeModal();
+    }
   </script>
-
 </body>
 </html>
