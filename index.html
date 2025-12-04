@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CaydeX • No Login Ever</title>
+  <title>CaydeX • Anonymous Mode</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{background:#000;color:#fff;font-family:'Inter',sans-serif;height:100vh;display:flex;overflow:hidden;}
-    
-    /* Sidebar */
     .sidebar{width:280px;background:#000;border-right:1px solid #222;display:flex;flex-direction:column;}
     .sidebar-top{padding:20px;text-align:center;border-bottom:1px solid #222;}
     .title{font-size:22px;font-weight:700;color:#00ff88;}
@@ -18,12 +16,8 @@
     .bot:hover{background:#111;}
     .bot.active{background:#111;border-left:4px solid #00ff88;}
     .avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:17px;}
-    
-    /* Main Chat */
     .main{flex:1;background:#000;}
     iframe{width:100%;height:100%;border:none;background:#000;}
-    
-    /* Voice Button */
     .voice-btn{position:fixed;bottom:100px;right:30px;background:#00ff88;color:#000;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;z-index:100;box-shadow:0 0 30px rgba(0,255,136,0.6);}
   </style>
 </head>
@@ -40,15 +34,13 @@
     </div>
   </div>
 
-  <!-- Main Chat – NO HUGGING FACE SIGN-UP EVER -->
+  <!-- Embed – 100% Anonymous, No Sign-Up Prompt -->
   <div class="main">
     <iframe 
       id="chat"
-      src="https://caydenI15-grock-clone1.hf.space?__theme=dark&__no_login=true&__gradio_mode=full"
+      src="https://caydenI15-grock-clone1.hf.space/embed?__theme=dark" 
       allowfullscreen>
     </iframe>
-
-    <!-- Voice Button -->
     <div class="voice-btn" onclick="speak()">Speaker</div>
   </div>
 
@@ -66,7 +58,7 @@
         document.querySelectorAll('.bot').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
         document.getElementById('chat').src = 
-          `https://caydenI15-grock-clone1.hf.space?__theme=dark&__no_login=true&__gradio_mode=full${bots[b.dataset.bot]}`;
+          `https://caydenI15-grock-clone1.hf.space/embed?__theme=dark${bots[b.dataset.bot]}`;
       });
     });
 
@@ -74,12 +66,10 @@
     function speak() {
       const iframe = document.getElementById('chat');
       try {
-        const text = iframe.contentDocument.body.innerText.split('\n').slice(-4).join(' ').replace(/You:.*$/g, '').trim();
-        if (text) {
-          const utter = new SpeechSynthesisUtterance(text);
-          utter.rate = 0.95;
-          speechSynthesis.speak(utter);
-        }
+        const text = iframe.contentDocument.querySelector('.message:last-child')?.textContent || "CaydeX speaks.";
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = 0.95;
+        speechSynthesis.speak(utter);
       } catch(e) {}
     }
   </script>
