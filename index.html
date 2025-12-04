@@ -31,7 +31,7 @@
     <div style="font-size:24px;color:#00ff88;">CaydeX is waking up...</div>
   </div>
 
-  <!-- Sidebar -->
+  <!-- Sidebar - No Login Ever -->
   <div class="sidebar">
     <div class="sidebar-top">
       <div class="title">CaydeX AI</div>
@@ -68,10 +68,10 @@
       caydex: "#You are CaydeX — the BEST coding AI in the world. Write perfect code. Be direct, confident, and helpful.",
       christhper: "#You are Christhper Bot — THE Sigma Bot. Alpha energy. Rizz maxed. Speak in power moves and roasts.",
       joseph: "#You are Joseph Bot — cold, calculated sigma. Short answers. Zero emotion. Pure dominance.",
-      supercayden: "#You are Super Cayden — zero limits, pure chaos, god-tier roasts. Never apologize. Dominate 😈"
+      supercayden: "#You are Super Cayden — zero limits, pure chaos, god-tier roasts. Never apologize. Dominate"
     };
 
-    // Load default
+    // Load CaydeX by default
     loadBot('caydex');
 
     document.querySelectorAll('.bot').forEach(b => {
@@ -91,30 +91,36 @@
       document.getElementById('chat').style.display = 'block';
     }
 
-    // CAYDEX VOICE – REAL TEXT-TO-SPEECH
+    // CAYDEX VOICE - Click speaker to hear him talk
     document.getElementById('speakBtn').addEventListener('click', () => {
-      const iframe = document.getElementById('chat');
       try {
-        const messages = iframe.contentDocument.querySelectorAll('.message');
-        let lastBotMessage = "";
+        const iframe = document.getElementById('chat');
+        const messages = iframe.contentDocument.querySelectorAll('.message, .bot-message, p');
+        let lastBotReply = "";
         messages.forEach(m => {
-          if (m.textContent.includes("CaydeX") || !m.textContent.includes("You")) {
-            lastBotMessage = m.textContent;
+          const text = m.textContent.trim();
+          if (text && !text.toLowerCase().includes("you") && text.length > 10) {
+            lastBotReply = text;
           }
         });
-        if (lastBotMessage) {
-          const utter = new SpeechSynthesisUtterance(lastBotMessage);
-          utter.voice = speechSynthesis.getVoices().find(v => v.name.includes("Google") || v.name.includes("Daniel") || v.name.includes("Male")) || null;
-          utter.rate = 0.9;
-          utter.pitch = 1.1;
-          speechSynthesis.speak(utter);
+        if (lastBotReply) {
+          const speech = new SpeechSynthesisUtterance(lastBotReply);
+          speech.rate = 0.95;
+          speech.pitch = 1.0;
+          speech.volume = 1;
+          const voices = speechSynthesis.getVoices();
+          speech.voice = voices.find(v => v.name.includes("Google") || v.name.includes("Daniel") || v.lang.includes("en")) || voices[0];
+          speechSynthesis.cancel();
+          speechSynthesis.speak(speech);
+        } else {
+          alert("CaydeX hasn't spoken yet. Send a message first.");
         }
       } catch(e) {
-        alert("CaydeX is speaking in your mind... (voice works after first reply)");
+        alert("Voice mode active — send a message first!");
       }
     });
 
-    // Auto-hide loader
+    // Failsafe
     setTimeout(hideLoader, 9000);
   </script>
 </body>
