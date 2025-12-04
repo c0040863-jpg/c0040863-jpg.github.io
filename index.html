@@ -3,52 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CaydeX • Sign in with Google</title>
+  <title>CaydeX • Guest Mode</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:#000;color:#fff;font-family:'Inter',sans-serif;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-    .login-box{background:#111;border:1px solid #333;border-radius:16px;padding:40px 50px;text-align:center;width:400px;box-shadow:0 0 40px rgba(0,255,136,0.2);}
-    .logo{font-size:48px;margin-bottom:20px;}
-    h1{font-size:28px;margin-bottom:10px;color:#00ff88;}
-    p{font-size:16px;opacity:0.8;margin-bottom:30px;}
-    .google-btn{
-      background:#fff;color:#000;border:none;padding:14px 24px;border-radius:50px;
-      font-size:18px;font-weight:600;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;gap:12px;
-      width:100%;transition:0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+    body{background:#000;color:#fff;font-family:'Inter',sans-serif;height:100vh;overflow:hidden;}
+    
+    /* Fake Hugging Face Login Screen */
+    #loginScreen{
+      height:100vh;display:flex;align-items:center;justify-content:center;
+      background:#000;
     }
-    .google-btn:hover{background:#f1f1f1;transform:scale(1.02);}
-    .google-btn img{width:24px;height:24px;}
-    .hidden{display:none;}
+    .login-box{
+      background:#111;border:1px solid #333;border-radius:16px;padding:50px 60px;
+      text-align:center;width:420px;box-shadow:0 0 50px rgba(0,255,136,0.2);
+    }
+    .logo{font-size:70px;margin-bottom:20px;}
+    h1{font-size:30px;margin-bottom:10px;color:#00ff88;}
+    p{font-size:17px;opacity:0.8;margin-bottom:40px;}
+    .google-btn{
+      background:#fff;color:#000;border:none;padding:16px 30px;border-radius:50px;
+      font-size:19px;font-weight:600;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;gap:14px;
+      width:100%;transition:0.3s;box-shadow:0 6px 30px rgba(0,0,0,0.4);
+    }
+    .google-btn:hover{background:#f8f8f8;transform:scale(1.03);}
+    .google-btn img{width:28px;height:28px;}
+    
+    /* Real Chat – Full Screen */
+    #chat{display:none;width:100%;height:100%;border:none;}
   </style>
 </head>
 <body>
 
-  <!-- Fake Hugging Face Login Screen -->
-  <div id="loginScreen" class="login-box">
-    <div class="logo">smiling face</div>
-    <h1>Sign in to CaydeX</h1>
-    <p>Continue to your AI</p>
-    <button class="google-btn" onclick="loginAsGuest()">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G">
-      Sign in with Google
-    </button>
+  <!-- Fake Hugging Face Login (with smiling face) -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="logo">smiling face</div>
+      <h1>Sign in to CaydeX</h1>
+      <p>Continue to your AI</p>
+      <button class="google-btn" onclick="enterGuestMode()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G">
+        Sign in with Google
+      </button>
+    </div>
   </div>
 
-  <!-- Real Chat – Loads After "Login" -->
+  <!-- Real Chat – Loads After Clicking "Sign in" -->
   <iframe 
     id="chat"
-    class="hidden"
     src="https://caydenI15-grock-clone1.hf.space?__theme=dark&embed=true"
-    allowfullscreen
-    style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;">
+    allowfullscreen>
   </iframe>
 
   <script>
-    function loginAsGuest() {
+    function enterGuestMode() {
+      // Hide fake login screen
       document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('chat').classList.remove('hidden');
+      // Show real chat
+      document.getElementById('chat').style.display = 'block';
     }
   </script>
 </body>
