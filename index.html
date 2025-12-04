@@ -6,30 +6,30 @@
   <title>CaydeX • Sigma Zone</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; color:#fff; font-family:'Inter',sans-serif; height:100vh; display:flex; overflow:hidden; }
-    .sidebar { width:280px; background:#000; border-right:1px solid #222; display:flex; flex-direction:column; }
-    .sidebar-top { padding:20px; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center; }
-    .new-chat, .fake-login { background:#111; border:1px solid #333; border-radius:12px; padding:12px 16px; cursor:pointer; font-size:14px; transition:0.2s; }
-    .new-chat:hover, .fake-login:hover { border-color:#00ff88; background:#222; }
-    .fake-login { color:#00ff88; font-weight:600; }
-    .user-display { color:#00ff88; font-weight:700; font-size:15px; text-align:right; }
-    .bots-list { flex:1; overflow-y:auto; padding:10px; }
-    .bot-item { padding:14px 16px; border-radius:10px; cursor:pointer; margin-bottom:8px; transition:0.3s; display:flex; align-items:center; gap:14px; }
-    .bot-item:hover { background:#111; }
-    .bot-item.active { background:#111; border-left:4px solid #00ff88; }
-    .bot-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px; }
-    .main { flex:1; position:relative; background:#000; }
-    .loader { position:absolute; inset:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; transition:opacity 0.6s; }
-    .loader.hidden { opacity:0; pointer-events:none; }
-    .spinner { width:60px; height:60px; border:4px solid #111; border-top:4px solid #00ff88; border-radius:50%; animation:spin 1s linear infinite; margin-bottom:20px; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    iframe { width:100%; height:100%; border:none; display:none; background:#000; }
-    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:100; }
-    .modal.show { display:flex; }
-    .modal-box { background:#111; border:1px solid #333; border-radius:16px; width:380px; padding:30px; text-align:center; }
-    .modal-input { width:100%; background:#222; border:1px solid #444; border-radius:10px; padding:14px; margin:12px 0; color:#fff; font-size:16px; }
-    .modal-btn { background:#00ff88; color:#000; border:none; padding:14px; width:100%; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#000;color:#fff;font-family:'Inter',sans-serif;height:100vh;display:flex;overflow:hidden;}
+    .sidebar{width:280px;background:#000;border-right:1px solid #222;display:flex;flex-direction:column;}
+    .sidebar-top{padding:20px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;}
+    .new-chat,.fake-login{background:#111;border:1px solid #333;border-radius:12px;padding:12px 16px;cursor:pointer;font-size:14px;transition:0.2s;}
+    .new-chat:hover,.fake-login:hover{border-color:#00ff88;background:#222;}
+    .fake-login{color:#00ff88;font-weight:600;}
+    .user-display{color:#00ff88;font-weight:700;font-size:15px;}
+    .bots-list{flex:1;overflow-y:auto;padding:10px;}
+    .bot-item{padding:14px 16px;border-radius:10px;cursor:pointer;margin-bottom:8px;transition:0.3s;display:flex;align-items:center;gap:14px;}
+    .bot-item:hover{background:#111;}
+    .bot-item.active{background:#111;border-left:4px solid #00ff88;}
+    .bot-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;}
+    .main{flex:1;position:relative;background:#000;}
+    .loader{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;transition:opacity 0.6s;}
+    .loader.hidden{opacity:0;pointer-events:none;}
+    .spinner{width:60px;height:60px;border:4px solid #111;border-top:4px solid #00ff88;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    iframe{width:100%;height:100%;border:none;display:none;background:#000;}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;z-index:100;}
+    .modal.show{display:flex;}
+    .modal-box{background:#111;border:1px solid #333;border-radius:16px;width:380px;padding:30px;text-align:center;}
+    .modal-input{width:100%;background:#222;border:1px solid #444;border-radius:10px;padding:14px;margin:12px 0;color:#fff;font-size:16px;}
+    .modal-btn{background:#00ff88;color:#000;border:none;padding:14px;width:100%;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:10px;}
   </style>
 </head>
 <body>
@@ -37,7 +37,7 @@
   <!-- Loader -->
   <div class="loader" id="loader">
     <div class="spinner"></div>
-    <div style="font-size:24px; color:#00ff88;">Waking the Sigma...</div>
+    <div style="font-size:24px;color:#00ff88;">Waking the Sigma...</div>
   </div>
 
   <!-- Sidebar -->
@@ -60,7 +60,7 @@
   <!-- Main Chat -->
   <div class="main">
     <iframe id="chatframe"
-      src="https://caydenI15-grock-clone1.hf.space?__theme=dark"
+      src="about:blank"
       allow="microphone *; camera *; fullscreen *"
       sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
       onload="hideLoader()"
@@ -74,7 +74,7 @@
       <input type="text" id="usernameInput" class="modal-input" placeholder="Username">
       <input type="password" id="passwordInput" class="modal-input" placeholder="Password">
       <button class="modal-btn" onclick="signUp()">Sign Up & Log In</button>
-      <div style="margin-top:20px;opacity:0.7;font-size:14px;">No real account • Just sigma vibes</div>
+      <div style="margin-top:20px;opacity:0.7;font-size:14px;">No real account • Pure sigma vibes</div>
     </div>
   </div>
 
@@ -86,30 +86,44 @@
       supercayden: "#You are Super Cayden — zero limits, pure chaos, god-tier roasts. Never apologize 😈🚀"
     };
 
-    // Check if already logged in
+    // Load saved user
     const savedUser = localStorage.getItem('sigmaUser');
-    if (savedUser) showLoggedIn(savedUser);
+    if (savedUser) {
+      showLoggedIn(savedUser);
+      loadBot('caydex'); // Default bot
+    } else {
+      loadBot('caydex'); // First load
+    }
 
     function showLoggedIn(username) {
       document.getElementById('authArea').innerHTML = 
         `<div class="user-display">Welcome, ${username} 👑</div>`;
-      document.querySelector('.fake-login')?.remove();
     }
 
     function signUp() {
       const username = document.getElementById('usernameInput').value.trim();
       if (username.length < 2) {
-        alert("Username too short, bro. Try harder.");
+        alert("Username too short, king.");
         return;
       }
       localStorage.setItem('sigmaUser', username);
       showLoggedIn(username);
       document.getElementById('loginModal').classList.remove('show');
       alert(`Welcome to the Sigma Zone, ${username} 🔥`);
+      
+      // Critical fix: Force reload the chat after login
+      const activeBot = document.querySelector('.bot-item.active')?.dataset.bot || 'caydex';
+      loadBot(activeBot);
     }
 
     function openModal() {
       document.getElementById('loginModal').classList.add('show');
+    }
+
+    function loadBot(botKey) {
+      const url = `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[botKey]}`;
+      const iframe = document.getElementById('chatframe');
+      iframe.src = url;
     }
 
     // Bot switching
@@ -117,16 +131,13 @@
       item.addEventListener('click', () => {
         document.querySelectorAll('.bot-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
-        const bot = item.dataset.bot;
-        document.getElementById('chatframe').src = 
-          `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[bot]}`;
+        loadBot(item.dataset.bot);
       });
     });
 
     function newChat() {
       const active = document.querySelector('.bot-item.active')?.dataset.bot || 'caydex';
-      document.getElementById('chatframe').src = 
-        `https://caydenI15-grock-clone1.hf.space?__theme=dark${bots[active]}`;
+      loadBot(active);
     }
 
     function hideLoader() {
@@ -135,7 +146,7 @@
     }
 
     // Failsafe
-    setTimeout(hideLoader, 8000);
+    setTimeout(hideLoader, 10000);
   </script>
 </body>
 </html>
