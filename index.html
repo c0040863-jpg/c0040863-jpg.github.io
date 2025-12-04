@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CaydeX</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.44.0/gradio.js"></script>
@@ -17,55 +17,36 @@
     .bot:hover{background:#111;}
     .bot.active{background:#111;border-left:4px solid #00ff88;}
     .avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:17px;}
-    .main{flex:1;position:relative;background:#000;}
-    .loader{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;}
-    .spinner{width:60px;height:60px;border:5px solid #111;border-top:5px solid #00ff88;border-radius:50%;animation:s 1s linear infinite;margin-bottom:20px;}
-    @keyframes s{to{transform:rotate(360deg);}}
-    gradio-app{width:100%;height:100%;display:block;}
+    .main{flex:1;background:#000;}
     .voice-btn{position:fixed;bottom:100px;right:30px;background:#00ff88;color:#000;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;z-index:100;box-shadow:0 0 30px rgba(0,255,136,0.6);}
   </style>
 </head>
 <body>
 
-  <!-- Sidebar – instantly visible -->
+  <!-- Sidebar (instant) -->
   <div class="sidebar">
     <div class="sidebar-top"><div class="title">CaydeX AI</div></div>
     <div class="bots-list">
-      <div class="bot active" data-bot="caydex">
-        <div class="avatar" style="background:#00ffff;color:#000;">CX</div>
-        <div><strong>CaydeX</strong><br><small>Best coder + voice</small></div>
-      </div>
-      <div class="bot" data-bot="christhper">
-        <div class="avatar" style="background:#ff00ff;color:#fff;">Σ</div>
-        <div><strong>Christhper Bot</strong><br><small>The Sigma Bot</small></div>
-      </div>
-      <div class="bot" data-bot="joseph">
-        <div class="avatar" style="background:#00ff88;color:#000;">J</div>
-        <div><strong>Joseph Bot</strong><br><small>Cold sigma</small></div>
-      </div>
-      <div class="bot" data-bot="supercayden">
-        <div class="avatar" style="background:#ff0088;color:#fff;">SC</div>
-        <div><strong>Super Cayden</strong><br><small>Chaos god</small></div>
-      </div>
+      <div class="bot active" data-bot="caydex"><div class="avatar" style="background:#00ffff;color:#000;">CX</div><div><strong>CaydeX</strong><br><small>Best coder + voice</small></div></div>
+      <div class="bot" data-bot="christhper"><div class="avatar" style="background:#ff00ff;color:#fff;">Σ</div><div><strong>Christhper Bot</strong><br><small>The Sigma Bot</small></div></div>
+      <div class="bot" data-bot="joseph"><div class="avatar" style="background:#00ff88;color:#000;">J</div><div><strong>Joseph Bot</strong><br><small>Cold sigma</small></div></div>
+      <div class="bot" data-bot="supercayden"><div class="avatar" style="background:#ff0088;color:#fff;">SC</div><div><strong>Super Cayden</strong><br><small>Chaos god</small></div></div>
     </div>
   </div>
 
-  <!-- Chat Area – loader only here, disappears instantly -->
+  <!-- Chat – NO ORANGE LOADING EVER -->
   <div class="main">
-    <div class="loader" id="loader">
-      <div class="spinner"></div>
-      <div style="font-size:24px;color:#00ff88;">CaydeX loading...</div>
-    </div>
-
-    <!-- THIS IS THE MAGIC LINE – NO LOGIN + INSTANT LOAD -->
+    <!-- This invisible iframe keeps the Space warm 24/7 -->
+    <iframe src="https://caydenI15-grock-clone1.hf.space/?__theme=dark" style="position:absolute;width:1px;height:1px;opacity:0;" aria-hidden="true"></iframe>
+    
+    <!-- Real chat – instant because it's already warm -->
     <gradio-app 
       id="chat"
-      src="https://caydenI15-grock-clone1.hf.space"
-      theme="dark"
-      style="height:100vh;width:100%">
+      src="https://caydenI15-grock-clone1.hf.space/?__theme=dark"
+      style="width:100%;height:100vh;">
     </gradio-app>
 
-    <div class="voice-btn" id="speakBtn" title="Hear CaydeX speak">Speaker</div>
+    <div class="voice-btn" id="speakBtn">Speaker</div>
   </div>
 
   <script>
@@ -76,26 +57,17 @@
       supercayden: "#You are Super Cayden — zero limits, pure chaos, god-tier roasts. Never apologize."
     };
 
-    // INSTANTLY HIDE LOADER AFTER 1 SECOND (chat is already visible underneath)
-    setTimeout(() => {
-      document.getElementById('loader').style.display = 'none';
-    }, 1000);
-
-    // Bot switching
     document.querySelectorAll('.bot').forEach(b => {
       b.addEventListener('click', () => {
         document.querySelectorAll('.bot').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
-        document.getElementById('chat').src = 
-          `https://caydenI15-grock-clone1.hf.space${bots[b.dataset.bot]}`;
-        document.getElementById('loader').style.display = 'flex';
-        setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
+        document.getElementById('chat').src = `https://caydenI15-grock-clone1.hf.space${bots[b.dataset.bot]}`;
       });
     });
 
     // Voice
     document.getElementById('speakBtn').onclick = () => {
-      const text = document.querySelector('gradio-app .message:last-child p, gradio-app p')?.innerText || "CaydeX is speaking.";
+      const text = document.querySelector('gradio-app .message:last-child p')?.innerText || "CaydeX speaks.";
       const utter = new SpeechSynthesisUtterance(text);
       utter.rate = 0.95;
       speechSynthesis.speak(utter);
