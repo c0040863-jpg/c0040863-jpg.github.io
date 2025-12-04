@@ -11,16 +11,16 @@
     .sidebar{width:280px;background:#000;border-right:1px solid #222;display:flex;flex-direction:column;}
     .sidebar-top{padding:20px;text-align:center;border-bottom:1px solid #222;}
     .title{font-size:22px;font-weight:700;color:#00ff88;}
-    .guest-btn{background:#111;border:1px solid #333;padding:12px 16px;border-radius:12px;cursor:pointer;margin:10px auto;display:block;width:80%;transition:0.3s;}
+    .guest-btn{background:#111;border:1px solid #333;padding:14px 20px;border-radius:12px;cursor:pointer;margin:15px auto;display:block;width:80%;font-weight:600;transition:0.3s;}
     .guest-btn:hover{background:#222;border-color:#00ff88;}
-    .bots-list{flex:1;overflow-y:auto;padding:10px;}
+    .bots-list{flex:1;overflow-y:auto;padding:10px;display:none;}
     .bot{padding:14px 16px;border-radius:12px;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;gap:14px;transition:0.3s;}
     .bot:hover{background:#111;}
     .bot.active{background:#111;border-left:4px solid #00ff88;}
     .avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:17px;}
-    .main{flex:1;background:#000;}
-    iframe{width:100%;height:100%;border:none;background:#000;}
-    .voice-btn{position:fixed;bottom:100px;right:30px;background:#00ff88;color:#000;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;z-index:100;box-shadow:0 0 30px rgba(0,255,136,0.6);}
+    .main{flex:1;background:#000;position:relative;}
+    iframe{width:100%;height:100%;border:none;background:#000;display:none;}
+    .voice-btn{position:fixed;bottom:100px;right:30px;background:#00ff88;color:#000;width:60px;height:60px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:30px;cursor:pointer;z-index:100;box-shadow:0 0 30px rgba(0,255,136,0.6);}
   </style>
 </head>
 <body>
@@ -31,7 +31,7 @@
       <div class="title">CaydeX AI</div>
       <div class="guest-btn" onclick="loginAsGuest()">Login as Guest</div>
     </div>
-    <div class="bots-list" id="botsList" style="display:none;">
+    <div class="bots-list" id="botsList">
       <div class="bot active" data-bot="caydex"><div class="avatar" style="background:#00ffff;color:#000;">CX</div><div><strong>CaydeX</strong><br><small>Best coder + voice</small></div></div>
       <div class="bot" data-bot="christhper"><div class="avatar" style="background:#ff00ff;color:#fff;">Σ</div><div><strong>Christhper Bot</strong><br><small>The Sigma Bot</small></div></div>
       <div class="bot" data-bot="joseph"><div class="avatar" style="background:#00ff88;color:#000;">J</div><div><strong>Joseph Bot</strong><br><small>Cold sigma</small></div></div>
@@ -39,14 +39,14 @@
     </div>
   </div>
 
-  <!-- Chat -->
+  <!-- Chat Area -->
   <div class="main">
     <iframe id="chat" src="" allowfullscreen></iframe>
-    <div class="voice-btn" id="speakBtn" style="display:none;" onclick="speak()">Speaker</div>
+    <div class="voice-btn" id="speakBtn" onclick="speak()">Speaker</div>
   </div>
 
   <script>
-    const base = "https://caydenI15-grock-clone1.hf.space";
+    const baseURL = "https://caydenI15-grock-clone1.hf.space";
     const bots = {
       caydex: "#You are CaydeX — the BEST coding AI in the world. Write perfect code. Be direct, confident, and helpful.",
       christhper: "#You are Christhper Bot — THE Sigma Bot. Alpha energy. Rizz maxed. Speak in power moves and roasts.",
@@ -55,14 +55,14 @@
     };
 
     function loginAsGuest() {
+      // Hide button, show bots + voice
+      document.querySelector('.guest-btn').style.display = 'none';
       document.getElementById('botsList').style.display = 'block';
       document.getElementById('speakBtn').style.display = 'flex';
-      document.querySelector('.guest-btn').style.display = 'none';
-      loadBot('caydex');
-    }
-
-    function loadBot(bot) {
-      document.getElementById('chat').src = `${base}?__theme=dark${bots[bot]}`;
+      
+      // Load CaydeX instantly — NO HUGGING FACE LOGIN
+      document.getElementById('chat').src = baseURL + "?__theme=dark" + bots.caydex;
+      document.getElementById('chat').style.display = 'block';
     }
 
     // Bot switching
@@ -70,7 +70,7 @@
       b.addEventListener('click', () => {
         document.querySelectorAll('.bot').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
-        loadBot(b.dataset.bot);
+        document.getElementById('chat').src = baseURL + "?__theme=dark" + bots[b.dataset.bot];
       });
     });
 
@@ -79,7 +79,7 @@
       const iframe = document.getElementById('chat');
       try {
         const text = iframe.contentDocument.body.innerText.split('\n').slice(-5).join(' ').replace(/You:.*$/g, '').trim();
-        if (text) {
+        if (text && text.length > 5) {
           const utter = new SpeechSynthesisUtterance(text);
           utter.rate = 0.95;
           speechSynthesis.speak(utter);
