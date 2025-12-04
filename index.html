@@ -16,18 +16,12 @@
     .bot:hover{background:#111;}
     .bot.active{background:#111;border-left:4px solid #00ff88;}
     .avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:17px;}
-    .main{flex:1;position:relative;background:#000;}
-    .chat-loader{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;}
-    .spinner{width:60px;height:60px;border:5px solid #111;border-top:5px solid #00ff88;border-radius:50%;animation:s 1s linear infinite;margin-bottom:20px;}
-    @keyframes s{to{transform:rotate(360deg);}}
-    .chat-loader.hidden{display:none;}
-    iframe{width:100%;height:100%;border:none;background:#000;}
+    .main{flex:1;background:#000;}
     .voice-btn{position:fixed;bottom:100px;right:30px;background:#00ff88;color:#000;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;z-index:100;box-shadow:0 0 30px rgba(0,255,136,0.6);}
   </style>
 </head>
 <body>
 
-  <!-- Sidebar – Instant -->
   <div class="sidebar">
     <div class="sidebar-top"><div class="title">CaydeX AI</div></div>
     <div class="bots-list">
@@ -38,21 +32,13 @@
     </div>
   </div>
 
-  <!-- Main Chat – NO LOADING, NO SIGN-UP -->
   <div class="main">
-    <!-- Invisible pre-warmer (kills cold start) -->
-    <iframe src="https://caydenI15-grock-clone1.hf.space?__theme=dark" style="position:absolute;width:1px;height:1px;opacity:0;" aria-hidden="true"></iframe>
-    
-    <!-- Real chat – instant load -->
-    <iframe id="chat" src="https://caydenI15-grock-clone1.hf.space?__theme=dark" allowfullscreen></iframe>
+    <!-- This is the ONLY line that matters now -->
+    <iframe src="https://caydenI15-grock-clone1.hf.space?__theme=dark" 
+            style="width:100%;height:100%;border:none;" 
+            allowfullscreen></iframe>
 
-    <!-- Quick loader (gone in 1s) -->
-    <div class="chat-loader" id="loader">
-      <div class="spinner"></div>
-      <div style="font-size:24px;color:#00ff88;">CaydeX ready...</div>
-    </div>
-
-    <div class="voice-btn" id="speakBtn">Speaker</div>
+    <div class="voice-btn" onclick="speak()">Speaker</div>
   </div>
 
   <script>
@@ -63,32 +49,24 @@
       supercayden: "#You are Super Cayden — zero limits, pure chaos, god-tier roasts. Never apologize."
     };
 
-    // Hide loader in 1 second
-    setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
-
-    // Bot switching
     document.querySelectorAll('.bot').forEach(b => {
       b.addEventListener('click', () => {
         document.querySelectorAll('.bot').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
-        document.getElementById('chat').src = `https://caydenI15-grock-clone1.hf.space${bots[b.dataset.bot]}`;
-        document.getElementById('loader').classList.remove('hidden');
-        setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
+        document.querySelector('iframe').src = 
+          `https://caydenI15-grock-clone1.hf.space${bots[b.dataset.bot]}`;
       });
     });
 
-    // Voice
-    document.getElementById('speakBtn').onclick = () => {
-      const iframe = document.getElementById('chat');
+    function speak() {
+      const iframe = document.querySelector('iframe');
       try {
-        const text = iframe.contentDocument.querySelector('.message:last-child')?.textContent || "CaydeX speaks.";
+        const text = iframe.contentDocument.body.innerText.split('\n').slice(-3).join(' ');
         const utter = new SpeechSynthesisUtterance(text);
         utter.rate = 0.95;
         speechSynthesis.speak(utter);
-      } catch(e) {
-        alert("Voice active – send a message first!");
-      }
-    };
+      } catch(e) {}
+    }
   </script>
 </body>
 </html>
